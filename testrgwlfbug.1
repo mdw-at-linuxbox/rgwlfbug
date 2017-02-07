@@ -1,0 +1,77 @@
+.Dd February 7, 2017
+.Dt TESTRGWLFBUG 1
+.Os
+.Sh NAME
+.Nm testrgwlfbug
+.Nd test radosgw linefeed bug
+.Sh SYNOPSIS
+.Nm testrgwlfbug
+.Op Fl A Ar authorzation
+.Op Fl U Ar user
+.Op Fl K Ar key
+.Op Fl V Ar version
+.Op Fl D
+.Op Fl v
+.Sh DESCRIPTION
+The
+.Nm
+program will test a ceph radosgw gateway using swift operations.
+Old (buggy) versions of the software would emit an extra linefeed
+after certain oeprations.
+This program will try those operations and test to see if the
+extra linefeed is found.
+.Pp
+Options are:
+.Bl -tag -width flag
+.It Fl A Ar authorization
+Specifies the URL to request a swift authorization token.
+This should contain the radosgw host or ip address.
+This overrides the setting for
+.Ev ST_AUTH .
+.It Fl U user
+Specify the swift user.  Normally this will be of the form user:subuser.
+This overrides the setting for 
+.Ev ST_USER .
+.It Fl K key
+Specify the secret key.
+This overrides the setting for 
+.Ev ST_KEY .
+.It Fl V version
+Force use of a particular authorization version (1, 2, or 3).
+This can also be set by
+.Ev ST_AUTH_VERSION .
+.It Fl D
+Enable debugging - print everything that happens.
+.It Fl v
+Verbose - print details for operations that fail.
+.El
+.Pp
+Note that the authorization, user, and key data must be specified,
+either via environment variables or the command line.
+.Pp
+The program runs 3 tests, 
+.Sy test_container_list ,
+.Sy test_object_list_no_unsolicited_newline No and
+.Sy test_error_behaves_right .
+This exercises a control test (should always pass), and the two error cases
+(will both fail if the bug is present, else will both pass).
+.Sh ENVIRONMENT
+.Bl -tag -width 
+.It Ev ST_AUTH
+Specify a default for the swift authorization string.
+.It Ev ST_USER
+Specify a default for the swift user string.
+.It Ev ST_KEY
+Specify a default for the swift secret key string.
+.It Ev ST_AUTH_VERSION
+Request use of a particular authorization version (1,2, or 3).
+.Pp
+.El
+.Sh EXIT STATUS
+Exit 2 if any test cannot be completed, 1 if any test fails, else 0 if all goes well.
+.Sh EXAMPLES
+.Nm Fl A No http://10.17.152.69/auth/v1 Fl U No janedoe:swift Fl K No xyzzy
+.Sh SEE ALSO
+.Xr swift 1 .
+.Pp
+Also see the bug report: <https://bugzilla.redhat.com/show_bug.cgi?id=1385485>

@@ -1,0 +1,43 @@
+============================================
+Testrgwlfbug - test program for ceph radosgw
+============================================
+
+Please see
+https://bugzilla.redhat.com/show_bug.cgi?id=1385485
+http://tracker.ceph.com/issues/18473
+for more information on this bug.
+
+Checking out the source
+=======================
+
+You can clone from github with
+
+	git clone git@github.com:mdw-at-linuxbox/rgwlfbug
+
+or, if you are not a github user,
+
+	git clone git://github.com/mdw-at-linuxbox/rgwlfbug
+
+Build Prerequisites
+===================
+
+You will need a go compiler and ncw-swift.
+
+For fedora,
+
+	dnf install golang golang-github-ncw-swift-devel
+
+For debian,
+
+	apt-get install golang golang-github-ncw-swift-dev
+
+Building Ceph
+=============
+
+For both debian and fedora,
+
+	GOPATH=/usr/share/gocode go build testrgwlfbug.go
+
+The resulting native mode binary, testrgwlfbug, apperas to
+be very transportable to most binary-compatible machines,
+such as x86_64: centos7 <-> rhel7 <-> fedora24 <-> debian9.
